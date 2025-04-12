@@ -65,21 +65,6 @@ public class QuitController implements FxController {
 
 	@FXML
 	public void lockAndQuit() {
-		lockAndQuitButton.setDisable(true);
-		lockAndQuitButton.setContentDisplay(ContentDisplay.LEFT);
-
-		Task<Collection<Vault>> lockAllTask = vaultService.createLockAllTask(unlockedVaults, false);
-		lockAllTask.setOnSucceeded(evt -> {
-			LOG.info("Locked {}", lockAllTask.getValue().stream().map(Vault::getDisplayName).collect(Collectors.joining(", ")));
-			if (unlockedVaults.isEmpty()) {
-				window.close();
-				respondToQuitRequest(QuitResponse::performQuit);
-			}
-		});
-		lockAllTask.setOnFailed(evt -> {
-			LOG.warn("Locking failed", lockAllTask.getException());
-			window.setScene(quitForcedScene.get());
-		});
-		executorService.execute(lockAllTask);
+		QuitUtil.lockAndQuit(lockAndQuitButton, unlockedVaults, window, quitForcedScene, executorService);
 	}
 }
