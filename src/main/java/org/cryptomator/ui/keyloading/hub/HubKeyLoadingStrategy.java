@@ -77,17 +77,7 @@ public class HubKeyLoadingStrategy implements KeyLoadingStrategy {
 	}
 
 	private void showWindow(Lazy<Scene> scene) {
-		Platform.runLater(() -> {
-			window.setScene(scene.get());
-			window.show();
-			Window owner = window.getOwner();
-			if (owner != null) {
-				window.setX(owner.getX() + (owner.getWidth() - window.getWidth()) / 2);
-				window.setY(owner.getY() + (owner.getHeight() - window.getHeight()) / 2);
-			} else {
-				window.centerOnScreen();
-			}
-		});
+		PlatformWindowUtil.showWindow(scene.get(), window);
 	}
 
 }

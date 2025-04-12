@@ -123,17 +123,7 @@ public class MasterkeyFileLoadingStrategy implements KeyLoadingStrategy {
 
 	private Path askUserForMasterkeyFilePath() throws InterruptedException {
 		var comp = masterkeyFileChoice.build();
-		Platform.runLater(() -> {
-			window.setScene(comp.chooseMasterkeyScene());
-			window.show();
-			Window owner = window.getOwner();
-			if (owner != null) {
-				window.setX(owner.getX() + (owner.getWidth() - window.getWidth()) / 2);
-				window.setY(owner.getY() + (owner.getHeight() - window.getHeight()) / 2);
-			} else {
-				window.centerOnScreen();
-			}
-		});
+		PlatformWindowUtil.showWindow(comp.chooseMasterkeyFileScene(),window);
 		try {
 			return comp.result().get();
 		} catch (CancellationException e) {
@@ -145,20 +135,7 @@ public class MasterkeyFileLoadingStrategy implements KeyLoadingStrategy {
 
 	private void askForPassphrase() throws InterruptedException {
 		var comp = passphraseEntry.savedPassword(passphrase).build();
-		Platform.runLater(() -> {
-			window.setScene(comp.passphraseEntryScene());
-			window.show();
-			Window owner = window.getOwner();
-			if (owner != null) {
-				window.setX(owner.getX() + (owner.getWidth() - window.getWidth()) / 2);
-				window.setY(owner.getY() + (owner.getHeight() - window.getHeight()) / 2);
-			} else {
-				window.centerOnScreen();
-			}
-			if (wrongPassphrase) {
-				Animations.createShakeWindowAnimation(window).play();
-			}
-		});
+		PlatformWindowUtil.showWindow(comp.passphraseEntryScene(),window);
 		try {
 			var result = comp.result().get();
 			this.passphrase = result.passphrase();
